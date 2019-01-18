@@ -145,8 +145,9 @@ namespace Electrotherapy {
                 Vibrate();
             else {
                 float strength = remindTimes / 10f;
-                if (strength > 255)
+                if (strength > 255) {
                     strength = 255;
+                }
                 Zap(strength);
             }
             remindTimes++;
