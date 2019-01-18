@@ -63,24 +63,29 @@ namespace Electrotherapy {
             }
         }
 
+        private void HTTPGet(String url) {
+            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
+            request.AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate;
+            request.Timeout = 5000;
+            try {
+                request.GetResponse();
+            } catch {
+                Console.WriteLine("Error: request.GetResponse();");
+            }
+        }
+
         private void Vibrate(float strength = 0.5f) {
             String url = String.Format(
                 @"https://pavlok-unlocked.herokuapp.com/public/do/361d088c3/vibrate/{0}", (int)(strength*255));
 
-            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
-            request.AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate;
-
-            request.GetResponse();
+            HTTPGet(url);
         }
 
         private void Zap(float strength = 0.5f) {
             String url = String.Format(
                 @"https://pavlok-unlocked.herokuapp.com/public/do/361d088c3/zap/{0}", (int)(strength * 255));
 
-            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
-            request.AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate;
-
-            request.GetResponse();
+            HTTPGet(url);
         }
 
         private void Button_Zap(object sender, RoutedEventArgs e) {
@@ -127,9 +132,9 @@ namespace Electrotherapy {
             lastCursor.Y = nowCursor.Y;
 
 #if DEBUG
-            Console.WriteLine("Update.");
-            Console.WriteLine(String.Format("Cursor X: {0}, Y: {1}.", nowCursor.X, nowCursor.Y));
-            Console.WriteLine(String.Format("CountDown: {0}", countDownCursor));
+            //Console.WriteLine("Update.");
+            //Console.WriteLine(String.Format("Cursor X: {0}, Y: {1}.", nowCursor.X, nowCursor.Y));
+            //Console.WriteLine(String.Format("CountDown: {0}", countDownCursor));
 #endif
         }
 
@@ -146,7 +151,7 @@ namespace Electrotherapy {
             }
             remindTimes++;
         }
-
+         
         private void UpdateCountDown(int value) {
             countDownCursor = value;
             progressbarValue.IntValue = (int)(100*((float)value / (float)countDownCursorInit));
